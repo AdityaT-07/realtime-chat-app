@@ -4,7 +4,7 @@ import cors from 'cors';
 import { config } from "dotenv";
 import fileUpload from "express-fileupload";
 import { dbConnection } from "./database/db.js";
-
+import userRouter from './routes/user.routes.js'
 const app = express()
 
 config({ path : './config/config.env'})
@@ -21,5 +21,8 @@ app.use(fileUpload({
     useTempFiles : true,
     tempFileDir : './temp/', //frontend file of format(base64)will be stored here
 }))
+
+app.use('/api/v1/user',userRouter)
+
 dbConnection()
 export default app;

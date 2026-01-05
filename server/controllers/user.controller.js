@@ -48,6 +48,39 @@ export const signup = catchAsyncError(async (req,res,next)=>{
 
 })
 export const signin = catchAsyncError(async (req,res,next)=>{
+    const{email,password} = req.body;
+    if(!email || !password){
+        return res.status(400).json({
+            success : false,
+            message : 'please fill everything'
+        })
+    }
+
+     const emailReg = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if(!emailReg.test(email)){
+        return res.status(400).json({
+            success : false,
+            message : 'enter valid email '
+        })
+    }
+    const user = await User.findOne({email});
+    if(!user){
+        return res.status(400).json({
+            success : false,
+            message : 'Invalid details !'
+        })
+    }
+    const isPasswordMatched = await bcrypt.compare(password,user.password);
+     if(!isPasswordMatched){
+        return res.status(400).json({
+            success : false,
+            message : 'Invalid details !'
+        })
+    }
+
+    generateToken(user,"user loggin Successfully",201,res);
+    
+
 
 })
 export const signout = catchAsyncError(async (req,res,next)=>{

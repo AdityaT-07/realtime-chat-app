@@ -1,5 +1,7 @@
 import { catchAsyncError } from "../middlewares/catchAsyncError.middleware.js"
 import {User} from '../models/user.model.js'
+import { generateToken } from "../utils/jwtToken.js"
+import bcrypt from 'bcrypt'
 
 export const signup = catchAsyncError(async (req,res,next)=>{
     const{fullName,email,password} = req.body
@@ -9,7 +11,7 @@ export const signup = catchAsyncError(async (req,res,next)=>{
             message : 'please fill everything'
         })
     }
-    const emailReg = null
+    const emailReg = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if(!emailReg.test(email)){
         return res.status(400).json({
             success : false,
@@ -42,6 +44,7 @@ export const signup = catchAsyncError(async (req,res,next)=>{
             url : ''
         }
      })
+     generateToken(user,"User Registered Successfully",201,res);
 
 })
 export const signin = catchAsyncError(async (req,res,next)=>{

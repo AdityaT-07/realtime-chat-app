@@ -15,19 +15,28 @@ export const getAllUsers = catchAsyncError(async (req,res,next)=>{
     })
 })
 export const getMessages = catchAsyncError(async (req,res,next)=>{
-        const senderId = req.user._id;
-        const recieverId = req.params.id;
+        const myId = req.user._id;
+        const receiverId = req.params.id;
 
-        const message = Message.find({_id : {
-            $OR : [
-                {senderId : senderId, recieverId : recieverId},
-                { senderId : recieverId , recieverId : senderId }
-            ]
-        }})
+        const receiver = await User.findById(receiverId);
+
+        if(!receiver){
+            return res.status(400).json({
+                success : false,
+                message : "Receiver ID invalid"
+            })
+        }
+
+        const messages =  await Message.find({
+            $or : [
+                {senderId : myId, recieverId : receiverId},
+                { senderId : receiverId , receiverId : myId }
+            ],
+        }).sort({createdAt : 1})
 
         res.status(200).json({
             success : true,
-            message,
+            messages,
         })
 })
 export const sendMessage = catchAsyncError(async (req,res,next)=>{

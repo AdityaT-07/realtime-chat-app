@@ -20,6 +20,14 @@ export default function initSocket(server){
         if(userId){
             userSocketMap[userId] = socket.id;
         }
+
+        io.emit('getOnlineUser',Object.keys(userSocketMap))
+
+        socket.on('disconnect',()=>{
+            console.log('A user is disconnectted : ',socket.id);
+            delete userSocketMap[userId];
+            io.emit('getOnlineUser',Object.keys(userSocketMap))
+        })
         
     })
 

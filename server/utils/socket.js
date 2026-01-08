@@ -32,3 +32,9 @@ export default function initSocket(server){
     })
 
 }
+
+export function getReceiverSocketId(userId){
+    return userSocketMap[userId]
+}
+
+export {io};

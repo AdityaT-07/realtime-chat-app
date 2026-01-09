@@ -1,6 +1,19 @@
-import {createSlice} from '@reduxjs/toolkit'
+import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
+import {axiosInstance} from '../../lib/axios.js'
+import {connectSocket} from '../../lib/socket.js'
 
-export const getUser = ()=>{}
+export const getUser = createAsyncThunk('user/me', async(_,thunkAPI)=>{
+
+    try {
+        const res = await axiosInstance.get('/user/me')
+        connectSocket(res.data.user);
+        return res.data.user;
+    } catch (error) {
+        console.log("error fetching user : ",error);
+        return thunkAPI.rejectWithValue(error.response?.data || 'failed to fetch user')
+        
+    }
+})
 
 const authSlice = createSlice({
     name : 'auth',

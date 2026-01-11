@@ -1,8 +1,9 @@
 import { Eye, EyeOff, Loader, Loader2, Lock, Mail, MessageSquare } from "lucide-react";
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import AuthImagePattern from '../components/AuthImagePattern';
+import { login } from "../store/slices/authSlice";
 
 const Login = () => {
 const [showPassword, setshowPassword] = useState(false);
@@ -13,9 +14,11 @@ const [formData, setformData] = useState({
 
 const {isLoggingIn} = useSelector(state => state.auth);
 
+const dispatch = useDispatch();
+
 const handleSubmit = (e)=>{
    e.preventDefault();
-   // dispatch(login(formData));
+   dispatch(login(formData));
 }
 
 
@@ -66,7 +69,7 @@ const handleSubmit = (e)=>{
                   <Lock className="w-5 h-5"/>
                   </span>
                   <input type={showPassword ? 'text' : 'password'}
-                   className="w-full border border-gray-300 rounded-md py-2 pr-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                   className="w-full border  border-gray-300 rounded-md py-2 pr-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="********"
                   value={formData.password} 
                   onChange={(e)=>{
@@ -74,7 +77,7 @@ const handleSubmit = (e)=>{
                   }}
                   />
                   <button type="button" className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"
-                  onClick={setshowPassword(!showPassword)}
+                  onClick={() => setshowPassword(!showPassword)}
                   >
                     {
                       showPassword ? (

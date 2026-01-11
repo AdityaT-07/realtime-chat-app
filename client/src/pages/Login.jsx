@@ -2,6 +2,7 @@ import { Eye, EyeOff, Loader, Loader2, Lock, Mail, MessageSquare } from "lucide-
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import AuthImagePattern from '../components/AuthImagePattern';
 
 const Login = () => {
 const [showPassword, setshowPassword] = useState(false);
@@ -122,7 +123,7 @@ const handleSubmit = (e)=>{
 
       {/* right side of form */}
 
-      
+      <AuthImagePattern title={'Welcome back'} subtitle={'sigin to continue your conversation and catch up with your message'} />
   </div>
 
   </>;

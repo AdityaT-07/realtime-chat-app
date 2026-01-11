@@ -30,6 +30,23 @@ export const logout = createAsyncThunk('user/sign-out', async (_,thunkAPI)=>{
     }
 })
 
+export const login = createAsyncThunk('user/sign-in', async (data,thunkAPI)=>{
+    try {
+        await axiosInstance.post('user/sign-in', data);
+        connectSocket(res.data);
+        toast.success('logged in successfully')
+
+        return null;
+
+    } catch (error) {
+        toast.error(error.response.data.message);
+        return thunkAPI.rejectWithValue(error.response.data.message)
+        
+    }
+})
+
+
+
 const authSlice = createSlice({
     name : 'auth',
     initialState :{

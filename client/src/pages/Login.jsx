@@ -111,12 +111,13 @@ const handleSubmit = (e)=>{
           </form>
 
           {/* foot */}
-          <div className="mt-5 text-center">
-            <p className="text-sm text-gray-500 "></p>
+          <div className="mt-6 text-center">
+            <p className="text-sm text-gray-500 ">
                     Don&apos;t have an account?{''}
                     <Link to={'/register'} className="text-blue-600 hover:underline">
                     Create Account 
                     </Link>
+                    </p>
           </div>
         </div>
       </div>

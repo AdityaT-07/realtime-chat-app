@@ -1,13 +1,14 @@
 import { LogOut, MessageSquare, Settings, User } from "lucide-react";
 import {useDispatch, useSelector} from 'react-redux'
 import { Link } from "react-router-dom";
+import {logout} from '../store/slices/authSlice'
 const Navbar = () => {
   const {authUser} = useSelector((state)=>state.auth)
 
   const dispatch = useDispatch()
   
   const handleLogout = ()=>{
-    // useDispatch(logout());
+    dispatch(logout());
   }
 
   

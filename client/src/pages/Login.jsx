@@ -1,6 +1,7 @@
 import { Eye, EyeOff, Loader, Loader2, Lock, Mail, MessageSquare } from "lucide-react";
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 const Login = () => {
 const [showPassword, setshowPassword] = useState(false);
@@ -106,8 +107,22 @@ const handleSubmit = (e)=>{
           </form>
 
           {/* foot */}
+          <div className="mt-5 text-center">
+            <p className="text-sm text-gray-500 "></p>
+                    Don&apos;t have an account?{''}
+                    <Link to={'/register'} className="text-blue-600 hover:underline">
+                    Create Account 
+                    </Link>
+          </div>
         </div>
       </div>
+
+
+
+
+      {/* right side of form */}
+
+      
   </div>
 
   </>;

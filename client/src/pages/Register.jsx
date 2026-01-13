@@ -11,6 +11,7 @@ import { useState } from "react";
 import {useDispatch, useSelector} from 'react-redux'
 import { Link } from "react-router-dom";
 import AuthImagePattern from "../components/AuthImagePattern";
+import { signup } from "../store/slices/authSlice";
 
 const Register = () => {
 
@@ -30,7 +31,7 @@ const Register = () => {
   const handleSubmit = (e)=>{
 
     e.preventDefault();
-    // dispatch(signup(formData))
+    dispatch(signup(formData))
 
   }
 

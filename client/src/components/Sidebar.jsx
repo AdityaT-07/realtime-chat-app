@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import {useDispatch, useSelector} from 'react-redux';
 import SidebarSkeleton from './skeletons/SidebarSkeleton'
-import { getUsers } from "../store/slices/chatSlice";
+import { getUsers, setSelectedUser } from "../store/slices/chatSlice";
 import { User } from "lucide-react";
 
 const Sidebar = () => {
@@ -49,6 +49,36 @@ const Sidebar = () => {
     </div>
 
 
+    </div>
+
+
+    {/* User List */}
+    <div className="overflow-y-auto w-full py-3">
+      {
+        filteredUsers.length>0 && filteredUsers.map((user)=>{
+          <button key ={user._id} 
+          onClick={()=>dispatch(setSelectedUser(user))}
+          className={`w-full p-3 flex items-center gap-3 transition-colors rounded-md ${
+            selectedUser?._id===user._id ?'bg-gray-200 ring-gray-200' : 'hover:bg-gray-200'
+          }`}
+          >
+          
+
+          {/* Avatar */}
+          <div className=" relative mx-auto lg:mx-0">
+            <img src={user?.avatar?.url || '/avatar-holder.avif'} alt={'/avatar-holder.avif'}
+            className="w-12 h-12 object-cover rounded-full"
+            />
+            {
+              
+            }
+          </div>
+
+
+          </button>
+        })
+
+      }
     </div>
   </aside>
   

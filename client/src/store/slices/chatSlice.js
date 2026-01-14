@@ -1,5 +1,19 @@
-import {createSlice} from '@reduxjs/toolkit'
+import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
+import {axiosInstance} from '../../lib/socket';
+import {toast} from 'react-toastify';
 
+
+export const getUsers = createAsyncThunk('chat/getusers',async (_, thunkAPI)=>{
+    try {
+        const res = await axiosInstance.get('/message/users');
+        return res.data.users;
+
+
+    } catch (error) {
+        toast.error(error.response?.data?.message);
+        return thunkAPI.rejectWithValue(error.response?.data?.message);
+    }
+})
 
 const chatSlice = createSlice({
     name : 'chat',
@@ -23,3 +37,5 @@ const chatSlice = createSlice({
 
 
 export const {setSelectedUser,pushNewMessage} = chatSlice.actions;
+
+export default chatSlice.reducer;

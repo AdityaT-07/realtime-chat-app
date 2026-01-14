@@ -32,6 +32,16 @@ const chatSlice = createSlice({
         pushNewMessage : (state,action)=>{
             state.messages.push(action.payload)
         }
+    },
+    extraReducers : (builder)=>{
+        builder.addCase(getUsers.pending,(state)=>{
+            state.isUserLoading = true;
+        }).addCase(getUsers.fulfilled, (state,action)=>{
+            state.getUsers = action.payload;
+            state.isUserLoading = false; 
+        }).addCase(getUsers.rejected, (state)=>{
+            state.isUserLoading = false;
+        })
     }
 })
 

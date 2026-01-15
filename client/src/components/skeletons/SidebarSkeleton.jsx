@@ -32,6 +32,12 @@ const SidebarSkeleton = () => {
 
               {/* text skeleton for large screen only  */}
 
+              <div className="hidden lg:flex flex-col gap-2 flex-1 ">
+                <div className="h-4 w-32  bg-gray-300 rounded"/>
+                <div className="h-4 w-32  bg-gray-300 rounded"/>
+                <div className="h-4 w-32  bg-gray-300 rounded"/>
+              </div>
+
 
               </div>
             )

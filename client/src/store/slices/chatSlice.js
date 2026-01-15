@@ -7,8 +7,9 @@ export const getUsers = createAsyncThunk('chat/getusers',async (_, thunkAPI)=>{
     try {
         const res = await axiosInstance.get('/message/users');
         // console.log(res.data);
+        // console.log(res.data.user);
         
-        return res.data.users;
+        return res.data.user;
 
 
     } catch (error) {
@@ -28,7 +29,9 @@ const chatSlice = createSlice({
     },
     reducers :{
         setSelectedUser : (state,action)=>{
-            state.selectedUser = action.payload;
+            // state.selectedUser = action.payload;
+            state.users = action.payload.users;
+
 
         },
         pushNewMessage : (state,action)=>{
@@ -39,7 +42,8 @@ const chatSlice = createSlice({
         builder.addCase(getUsers.pending,(state)=>{
             state.isUserLoading = true;
         }).addCase(getUsers.fulfilled, (state,action)=>{
-            state.getUsers = action.payload;
+            // state.getUsers = action.payload;
+            state.users = action.payload;
             state.isUserLoading = false; 
         }).addCase(getUsers.rejected, (state)=>{
             state.isUserLoading = false;

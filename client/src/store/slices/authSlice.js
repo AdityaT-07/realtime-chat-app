@@ -7,7 +7,7 @@ export const getUser = createAsyncThunk('user/me', async(_,thunkAPI)=>{
 
     try {
         const res = await axiosInstance.get('/user/me')
-        connectSocket(res.data.user);
+        connectSocket(res.data.user._id);
         return res.data.user;
     } catch (error) {
         console.log("error fetching user : ",error);
@@ -33,7 +33,7 @@ export const logout = createAsyncThunk('user/sign-out', async (_,thunkAPI)=>{
 export const login = createAsyncThunk('user/sign-in', async (data,thunkAPI)=>{
     try {
         const res = await axiosInstance.post('user/sign-in', data);
-        connectSocket(res.data);
+        connectSocket(res.data.user._id);
         toast.success('logged in successfully')
 
         return res.data;

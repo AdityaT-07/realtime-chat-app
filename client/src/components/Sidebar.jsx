@@ -1,106 +1,131 @@
-import { useEffect, useState } from "react";
-import {useDispatch, useSelector} from 'react-redux';
-import SidebarSkeleton from './skeletons/SidebarSkeleton'
-import { getUsers, setSelectedUser } from "../store/slices/chatSlice";
+import { useEffect, useMemo, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { User } from "lucide-react";
 
+import SidebarSkeleton from "./skeletons/SidebarSkeleton";
+import { getUsers, setSelectedUser } from "../store/slices/chatSlice";
+
 const Sidebar = () => {
+  const [showOnlineOnly, setShowOnlineOnly] = useState(false);
 
-  const [showOnlineOnly, setshowOnlineOnly] = useState(false);
+  const { users = [], selectedUser, isUserLoading } = useSelector(
+    (state) => state.chat
+  );
 
-  const {users,selectedUser,isUserLoading} = useSelector((state)=>state.chat)
-  const {onlineUsers} = useSelector((state)=>state.auth);
+  const { onlineUsers = [] } = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
 
-  useEffect(()=>{
-    dispatch(getUsers())
-  },dispatch);
+  useEffect(() => {
+    dispatch(getUsers());
+  }, [dispatch]);
 
-  const filteredUsers = showOnlineOnly ? 
-  users?.filter((user) => onlineUsers.includes(user._id))
-   : users;
 
-  if(isUserLoading) return <SidebarSkeleton />
+const cleanOnlineUsers = useMemo(() => {
+  return onlineUsers
+    .map((u) => {
+      if (typeof u === "object" && u !== null) {
+        return u._id || u.userId || null;
+      }
+      if (typeof u === "string") {
+        if (u === "[object Object]") return null;
+        return u;
+      }
+      return null;
+    })
+    .filter(Boolean);
+}, [onlineUsers]);
 
-  return <>
-  <aside className="h-full w-20 lg:w-72 border-r border-gray-200 flex flex-col transition-all duration-200 bg-white">
-    {/* header */}
-    <div className="border-b  border-gray-200  w-full p-5">
-      <div className="flex items-center gap-2">
-        <User className="w-6 h-6 text-gray-700"/>
-        <span className="font-medium hidden lg:block text-gray-800 ">Contacts</span>
+const isUserOnline = (userId) =>
+  cleanOnlineUsers.includes(String(userId));
+
+const filteredUsers = showOnlineOnly
+  ? users.filter((user) => isUserOnline(user._id))
+  : users;
+
+
+  if (isUserLoading) return <SidebarSkeleton />;
+
+  /** testting */
+  // console.log("users:", users);
+  // console.log("onlineUsers (raw):", onlineUsers);
+  // console.log("onlineUsers (clean):", cleanOnlineUsers);
+
+  return (
+    <aside className="h-full w-64 border-r border-gray-200 flex flex-col bg-white">
+
+      {/* ================= HEADER ================= */}
+      <div className="border-b border-gray-200 w-full p-5">
+        <div className="flex items-center gap-2">
+          <User className="w-6 h-6 text-gray-700" />
+          <span className="font-medium text-gray-800">
+            Contacts
+          </span>
+        </div>
+
+        <div className="mt-3 flex items-center gap-2">
+          <label className="cursor-pointer flex items-center gap-2 text-sm text-gray-700">
+            <input
+              type="checkbox"
+              checked={showOnlineOnly}
+              onChange={(e) => setShowOnlineOnly(e.target.checked)}
+              className="w-4 h-4 border-gray-700 text-blue-600 focus:ring-blue-500"
+            />
+            Show Only Online
+          </label>
+          <span className="text-xs text-gray-500">
+            ({cleanOnlineUsers.length} online)
+          </span>
+        </div>
       </div>
 
-    {/* online only filter */}
+      {/* ================= USER LIST ================= */}
+    {/* {  console.log("ALL USERS:", users)}
+{console.log("ONLINE USERS:", onlineUsers)} */}
+      <div className="flex-1 overflow-y-auto w-full py-3">
+        {filteredUsers.length > 0 ? (
+          filteredUsers.map((user) => (
+            <button
+              key={user._id}
+              onClick={() => dispatch(setSelectedUser(user))}
+              className={`w-full p-3 flex items-center gap-3 rounded-md transition-colors ${
+                selectedUser?._id === user._id
+                  ? "bg-gray-200"
+                  : "hover:bg-gray-200"
+              }`}
+            >
+              {/* Avatar */}
+              <div className="relative">
+                <img
+                  src={user?.avatar?.url || "/avatar-holder.avif"}
+                  alt="avatar"
+                  className="w-12 h-12 object-cover rounded-full"
+                />
 
-    <div className="mt3 hidden lg:flex items-center gap-2">
-      <label className="cursor-pointer flex items-center gap-2 text-sm text-gray-700">
-        <input type="checkbox" 
-        checked ={showOnlineOnly}
-         onChange={(e)=> setshowOnlineOnly(e.target.checked)}
-         className="w-4 h-4 border-gray-700 text-blue-600 focus:ring-blue-500"
-         /> 
-         Show Only Online
-      </label>
-      <span className="text-xs text-gray-500 ">
-        ({onlineUsers.length -1} online)
-      </span>
-    </div>
+                {isUserOnline(user._id) && (
+                  <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full ring-2 ring-white" />
+                )}
+              </div>
 
-
-    </div>
-
-
-    {/* User List */}
-    <div className="overflow-y-auto w-full py-3">
-      {
-        filteredUsers?.length>0 && filteredUsers.map((user)=>{
-         return  (<button key ={user._id} 
-          onClick={()=>dispatch(setSelectedUser(user))}
-          className={`w-full p-3 flex items-center gap-3 transition-colors rounded-md ${
-            selectedUser?._id===user._id ?'bg-gray-200 ring-gray-200' : 'hover:bg-gray-200'
-          }`}
-          >
-          
-
-          {/* Avatar */}
-          <div className=" relative mx-auto lg:mx-0">
-            <img src={user?.avatar?.url || '/avatar-holder.avif'} alt={'/avatar-holder.avif'}
-            className="w-12 h-12 object-cover rounded-full"
-            />
-            {
-              onlineUsers.includes(user._id)  &&(
-                <span className="absolute bottom-0 right-0  w-3 bg-green-500 rounded-full ring-2 ring-white"/>
-              )
-            }
+              {/* User Info */}
+              <div className="text-left min-w-0">
+                <div className="font-medium text-gray-800 truncate">
+                  {user.fullName}
+                </div>
+                <div className="text-sm text-gray-500">
+                  {isUserOnline(user._id) ? "Online" : "Offline"}
+                </div>
+              </div>
+            </button>
+          ))
+        ) : (
+          <div className="text-center text-gray-500 py-4">
+            No Online Users
           </div>
-
-          {/* User information */}
-          <div className="hidden lg:block text-left min-w-0">
-            <div className="font-medium text-gray-800 truncate ">
-              {user.fullName}
-            </div>
-            <div className="text-sm text-gray-500 ">
-              {onlineUsers.includes(user._id) ? 'Online' : 'Offline'}
-
-            </div>
-          </div>
-          </button>)
-        })}
-
-        {
-          filteredUsers?.length ===0 &&(
-            <div className="text-center text-gray-500 py-4">
-              No Online User
-            </div>
-          )
-        }
-    </div>
-  </aside>
-  
-  
-  </>;
+        )}
+      </div>
+    </aside>
+  );
 };
 
 export default Sidebar;

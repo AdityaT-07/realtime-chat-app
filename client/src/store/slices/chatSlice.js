@@ -6,6 +6,8 @@ import {toast} from 'react-toastify';
 export const getUsers = createAsyncThunk('chat/getusers',async (_, thunkAPI)=>{
     try {
         const res = await axiosInstance.get('/message/users');
+        // console.log(res.data);
+        
         return res.data.users;
 
 

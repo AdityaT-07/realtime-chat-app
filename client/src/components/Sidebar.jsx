@@ -125,6 +125,7 @@ const filteredUsers = showOnlineOnly
         )}
       </div>
     </aside>
+    
   );
 };
 

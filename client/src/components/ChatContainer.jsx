@@ -57,7 +57,66 @@ const ChatContainer = () => {
   
   
   return <>
-  
+    <div className="flex-1 flex flex-col overflow-hidden bg-white">
+      <ChatHeader />
+
+      {/* chat message */}
+
+        <div className="flex-1 overflow-y-auto p-4 space-y-6">
+          {
+            messages.length > 0 && messages.map((message,index)=>{
+              const isSender =  message.senderId === authUser._id;
+
+              return(
+                <div key={message._id} className={`flex items-end ${isSender ? 'justify-end': 'justify-start'}`}
+                ref={index ===message.length-1 ? messageEndRef : null}
+                >
+                    {/* Avatar show */}
+                    <div className={`w-10 h-10 rounded-full overflow-hidden border shrink-0 ${isSender ? 'order-2 ml-3 ' : ' order-1 ml-3'}`}>
+                      <img 
+                      src={selectedUser?.avatar?.url || '/avatar-holder.avif'} alt="/avatar-holder.avif" 
+                       className='h-full w-full object-cover'
+                       />
+                    </div>
+
+
+
+                    {/* bubble message showing */}
+
+                    <div className={`max-w-xs sm:max-w-sm md:max-w-md px-4 py-2 rounded-xl text-sm ${isSender ? 'bg-blue-400/20 text-black order-1' : 'bg-gray-200 text-black order-2'}`}>
+                    
+                    {
+                      message.media && (
+                        <>
+                          {
+                           message.media.includes('.mp4') ||
+                            message.media.includes('.webm')||
+                            message.media.includes('.mov') ? (
+                              <video src={message.media} controls className='w-full rounded-md mb-2'></video>
+                            ) : (
+                              <img src={message.media} alt="Attachment" className='w-full rounded-md mb-2' />
+                            )
+                          }
+                        </>
+                      )
+                    }
+
+                    {
+                      message.text && <p>{message.text}</p>
+                    }
+
+                    <span className='block text-[10px] mt-1  text-right text-gray-400 '>
+
+                      {formatMessageTime(message.createdAt)}
+                    </span>
+                    
+                    </div>
+                </div>
+              )
+            })
+          }
+        </div>
+    </div>
   
   
   </>;

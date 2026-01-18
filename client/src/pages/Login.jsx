@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import AuthImagePattern from '../components/AuthImagePattern';
 import { login } from "../store/slices/authSlice";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
 const [showPassword, setshowPassword] = useState(false);
@@ -12,9 +14,16 @@ const [formData, setformData] = useState({
   password : '',
 })
 
-const {isLoggingIn} = useSelector(state => state.auth);
+const {isLoggingIn, authUser} = useSelector(state => state.auth);
 
 const dispatch = useDispatch();
+const navigate = useNavigate();
+
+useEffect(() => {
+  if (authUser) {
+    navigate("/", { replace: true });
+  }
+}, [authUser, navigate]);
 
 const handleSubmit = (e)=>{
    e.preventDefault();

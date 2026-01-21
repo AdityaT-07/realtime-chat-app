@@ -1,5 +1,6 @@
 import { X } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
+import { setSelectedUser } from "../store/slices/chatSlice";
 
 const ChatHeader = () => {
   
@@ -23,7 +24,7 @@ const ChatHeader = () => {
           className="w-full h-full object-cover rounded-full"
           />
           {
-            onlineUsers.includes(selectedUser._id) &&(
+            onlineUsers.includes(selectedUser?._id) &&(
               <span className="absolute bottom-0  right-0 w-3 h-3 bg-green-500 border-white border-2 rounded-full" />
             )
           }
@@ -35,7 +36,7 @@ const ChatHeader = () => {
                 <h3 className="font-medium text-base text-black"> {selectedUser?.fullName}</h3>
                 <p className="text-sm text-black">
                   {
-                    onlineUsers.includes(selectedUser._id) ? 'online' : 'offline'
+                    onlineUsers.includes(selectedUser?._id) ? 'online' : 'offline'
                   }
                 </p>
               </div>

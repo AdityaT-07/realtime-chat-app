@@ -69,12 +69,12 @@ const ChatContainer = () => {
 
               return(
                 <div key={message._id} className={`flex items-end ${isSender ? 'justify-end': 'justify-start'}`}
-                ref={index ===message.length-1 ? messageEndRef : null}
+                ref={index ===messages.length-1 ? messageEndRef : null}
                 >
                     {/* Avatar show */}
                     <div className={`w-10 h-10 rounded-full overflow-hidden border shrink-0 ${isSender ? 'order-2 ml-3 ' : ' order-1 ml-3'}`}>
                       <img 
-                      src={selectedUser?.avatar?.url || '/avatar-holder.avif'} alt="/avatar-holder.avif" 
+                      src={isSender ? authUser?.avatar?.url || '/avatar-holder.avif' : selectedUser?.avatar?.url || '/avatar-holder.avif' } alt="/avatar-holder.avif" 
                        className='h-full w-full object-cover'
                        />
                     </div>

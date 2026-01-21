@@ -72,7 +72,8 @@ const ChatContainer = () => {
                 ref={index ===messages.length-1 ? messageEndRef : null}
                 >
                     {/* Avatar show */}
-                    <div className={`w-10 h-10 rounded-full overflow-hidden border shrink-0 ${isSender ? 'order-2 ml-3 ' : ' order-1 ml-3'}`}>
+                    <div className={`w-10 h-10 rounded-full overflow-hidden border shrink-0 
+                       ${isSender ? 'order-2 ml-3' : 'order-1 mr-3'}`}>
                       <img 
                       src={isSender ? authUser?.avatar?.url || '/avatar-holder.avif' : selectedUser?.avatar?.url || '/avatar-holder.avif' } alt="/avatar-holder.avif" 
                        className='h-full w-full object-cover'
@@ -83,7 +84,7 @@ const ChatContainer = () => {
 
                     {/* bubble message showing */}
 
-                    <div className={`max-w-xs sm:max-w-sm md:max-w-md px-4 py-2 rounded-xl text-sm ${isSender ? 'bg-blue-400/20 text-black order-1' : 'bg-gray-200 text-black order-2'}`}>
+                    <div className={`max-w-[75%] sm:max-w-[60%] md:max-w-[50%] px-4 py-2 rounded-xl text-sm ${isSender ? 'bg-blue-400/20 text-black order-1' : 'bg-gray-200 text-black order-2'}`}>
                     
                     {
                       message.media && (
@@ -116,9 +117,8 @@ const ChatContainer = () => {
             })
           }
         </div>
+        <MessageInput />
     </div>
-  
-  
   </>;
 };
 

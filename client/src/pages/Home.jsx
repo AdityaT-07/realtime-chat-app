@@ -2,6 +2,8 @@ import {useSelector} from 'react-redux'
 import Sidebar from '../components/Sidebar'
 import NoChatSelected from '../components/NoChatSelected';
 import ChatHeader from '../components/ChatHeader';
+import ChatContainer from '../components/ChatContainer';
+
 const Home = () => {
 
   const {selectedUser}  = useSelector((state) => state.chat);
@@ -14,7 +16,7 @@ const Home = () => {
         <div className="flex h-full rounded-lg overflow-hidden">
           <Sidebar />
 
-        {!selectedUser ? <NoChatSelected /> : <ChatHeader />}
+        {!selectedUser ? <NoChatSelected /> : <ChatContainer />}
         </div>
       </div>
     </div>

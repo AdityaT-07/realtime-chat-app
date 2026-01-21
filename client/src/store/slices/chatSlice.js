@@ -19,7 +19,7 @@ export const getUsers = createAsyncThunk('chat/getusers',async (_, thunkAPI)=>{
 })
 
 
-export const getMessages = createAsyncThunk('chat/getMessages,', async (userId, thunkAPI)=>{
+export const getMessages = createAsyncThunk('chat/getMessages', async (userId, thunkAPI)=>{
     try {
         const res = await axiosInstance.get(`getMessage/${userId}`)
         return res.data;
@@ -44,8 +44,8 @@ const chatSlice = createSlice({
     },
     reducers :{
         setSelectedUser : (state,action)=>{
-            // state.selectedUser = action.payload;
-            state.users = action.payload.users;
+            state.selectedUser = action.payload;
+            // state.users = action.payload.users;
 
 
         },

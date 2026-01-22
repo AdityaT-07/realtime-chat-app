@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import {getSocket} from '../lib/socket'
+import { sendMessage } from "../store/slices/chatSlice";
 
 const MessageInput = () => {
   
@@ -20,7 +21,7 @@ const MessageInput = () => {
     if(!file) return;
     setMedia(file);
     const type = file.type;
-    if(type.startWith('image/')){
+    if(type.startsWith('image/')){
       setMediaType('image')
       const reader = new FileReader();
       reader.onload = ()=>{
@@ -28,7 +29,7 @@ const MessageInput = () => {
       }
       reader.readAsDataURL(file);
     }
-    else if(type.startWith('video/')){
+    else if(type.startsWith('video/')){
         setMediaType('video');
         const videoURL  = URL.createObjectURL(file);
         setMediaPreview(videoURL)
@@ -56,7 +57,7 @@ const MessageInput = () => {
     const data = new FormData()
     data.append('text',text.trim())
     data.append('media',media);
-    // dispatch(sendMessage(data));
+    dispatch(sendMessage(data));
 
     setText('');
     setMedia(null);

@@ -10,7 +10,7 @@ export const getAllUsers = catchAsyncError(async (req,res,next)=>{
     
     const filteredUser =  await User.find({_id : {$ne : userId}}).select('-password');
     
-    
+
     res.status(200).json({
         success : true,
         user : filteredUser,
@@ -31,7 +31,7 @@ export const getMessages = catchAsyncError(async (req,res,next)=>{
 
         const messages =  await Message.find({
             $or : [
-                {senderId : myId, recieverId : receiverId},
+                {senderId : myId, receiverId : receiverId},
                 { senderId : receiverId , receiverId : myId }
             ],
         }).sort({createdAt : 1})
@@ -42,10 +42,15 @@ export const getMessages = catchAsyncError(async (req,res,next)=>{
         })
 })
 export const sendMessage = catchAsyncError(async (req,res,next)=>{
-    const {senderId} = req?.user._id;
-    const {id : receiverId} = req.params.id;
-    const {media} = req?.files?.media;
-    const {text} = req.body;
+    // console.log("USER:", req.user);
+    // console.log("FILES:", req.files);
+    // console.log("BODY:", req.body);
+    const senderId = req?.user._id;
+    const  receiverId = req.params.id;
+    // const {media} = req?.files?.media;
+    const media = req.files?.media;
+
+    const {text} = req.body || {};
 
     const receiver = await User.findById(receiverId);
 
@@ -60,7 +65,7 @@ export const sendMessage = catchAsyncError(async (req,res,next)=>{
 
         if(!sanitizedText && !media){
             return res.status(400).json({
-                success :  true,
+                success :  false,
                 message : 'empty message is not allowed',
             })
         }
@@ -104,6 +109,10 @@ export const sendMessage = catchAsyncError(async (req,res,next)=>{
             receiverId,
             text : sanitizedText,
             media : mediaUrl
+            // from: { senderId },
+            // to: { receiverId },
+            // text: sanitizedText,
+            // media: mediaUrl
         })
 
         const receiverSocketId = getReceiverSocketId(receiverId);

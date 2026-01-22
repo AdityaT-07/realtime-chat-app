@@ -57,7 +57,11 @@ const MessageInput = () => {
     const data = new FormData()
     data.append('text',text.trim())
     data.append('media',media);
-    dispatch(sendMessage(data));
+    // dispatch(sendMessage(data));
+    dispatch(sendMessage({ 
+  text: text.trim(), 
+  media 
+}));
 
     setText('');
     setMedia(null);

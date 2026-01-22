@@ -21,7 +21,7 @@ export const getUsers = createAsyncThunk('chat/getusers',async (_, thunkAPI)=>{
 
 export const getMessages = createAsyncThunk('chat/getMessages', async (userId, thunkAPI)=>{
     try {
-        const res = await axiosInstance.get(`getMessage/${userId}`)
+        const res = await axiosInstance.get(`message/${userId}`)
         return res.data;
         
     } catch (error) {
@@ -33,11 +33,28 @@ export const getMessages = createAsyncThunk('chat/getMessages', async (userId, t
 
 })
 
-export const sendMessage = createAsyncThunk('chat/sendMessage',  async(messageData,thunkAPI)=>{
+export const sendMessage = createAsyncThunk('chat/sendMessage',  async({text,media},thunkAPI)=>{
     try {
-        const {chat} =thunkAPI.getState();
-        const res = await axiosInstance.post(`/message/send/${chat.selectedUser._id}`,messageData)
-        return res.data;
+        // const {chat} =thunkAPI.getState();
+        // const res = await axiosInstance.post(`/message/send/${chat.selectedUser._id}`,messageData)
+        // return res.data;
+
+        const { chat } = thunkAPI.getState();
+
+      if (!chat.selectedUser?._id) {
+        return thunkAPI.rejectWithValue("No user selected");
+      }
+
+      const formData = new FormData();
+      if (text) formData.append("text", text);
+      if (media) formData.append("media", media);
+
+      const res = await axiosInstance.post(
+        `/message/send/${chat.selectedUser._id}`,
+        formData
+      );
+
+      return res.data;
         
     } catch (error) {
         toast.error(error.response?.data?.message);

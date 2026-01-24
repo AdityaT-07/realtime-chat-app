@@ -81,10 +81,58 @@ const Profile = () => {
             <div className="text-sm  text-gray-500 flex items-center gap-2">
               <User className="w-4 h-4" /> Full Name
             </div>
+            <input type="text" value={formData.fullName} onCanPlay={(e)=>setFormData({...formData, fullName : e.target.value})} 
+            className="px-4 py-2.5 bg-gray-100 rounded-lg border border-gray-300 text-gray-800 w-full focus:outline-none"
+            />
           </div>
+
+            {/*  */}
+            <div className="space-y-1.5">
+            <div className="text-sm  text-gray-500 flex items-center gap-2">
+              <Mail className="w-4 h-4" /> Email
+            </div>
+            <input type="email" value={formData.email} onCanPlay={(e)=>setFormData({...formData, email : e.target.value})} 
+            className="px-4 py-2.5 bg-gray-100 rounded-lg border border-gray-300 text-gray-800 w-full focus:outline-none"
+            />
+          </div>
+
         </div>
 
 
+            {/* update avatar button */}
+
+            <button
+            onClick={handleUpdateProfile}
+            disabled = {isUpdatingProfile}
+            className="w-full bg-blue-600 text-white font-medium py-2 rounded-md transition duration-200 flex justify-center items-center gap-2"
+            >
+                {
+                  isUpdatingProfile ?(
+                    <>
+                    <Loader2 className="w-5 h-5 animate-spin" />Loading...
+                    </>
+                  ) :(
+                    'updateProfile'
+                  )
+                }
+            </button>
+
+
+            {/* account info */}
+            <div className="mt-6 bg-gray-50 border border-gray-200 rounded-xl p-6">
+              <h2 className="text-lg font-medium text-gray-800 mb-4">Account Information</h2>
+              <div className="space-y-3 text-sm text-gray-600">
+                <div className="flex items-center justify-between py-2 border-b border-r-gray-200 ">
+                  <span >Member Since</span>
+                  <span className="">{authUser.createdAt?.split('!')[0]}</span>
+
+                </div>
+                <div className="flex items-center justify-between py-2  ">
+                  <span>Account Status</span>
+                  <span className="text-green-600 font-medium ">Active</span>
+                </div>
+              </div>
+            </div>
 
 
 
